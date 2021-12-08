@@ -4,13 +4,27 @@ import responses.Responses;
 import java.util.*;
 
 public class FrontEnd {
-    Message scanStr = new Message();
-    Message scanInt = new Message();
-    Message scanD = new Message();
     public void start(){
         loop : while(true){
             System.out.println(Responses.MAIN_MENU);
-            int answer = scanInt.Message(new Scanner(System.in).nextInt());
+            int answer = getInt();
+            switch (answer){
+                case 0:{
+                    break loop;
+                }
+            }
         }
+    }
+    public int getInt(){
+        System.out.print("Input: ");
+        return new Scanner(System.in).nextInt();
+    }
+    public String getStr(){
+        System.out.print("Input: ");
+        return new Scanner(System.in).next();
+    }
+    public double getD(){
+        System.out.print("Input: ");
+        return new Scanner(System.in).nextDouble();
     }
 }
