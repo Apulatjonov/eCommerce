@@ -11,7 +11,7 @@ public interface BaseRepository<T,R,RL> {
     R remove(UUID id);
     RL getList();
 
-    default T check(List<T> list,T object){
+    default T check(List<T> list, T object){
         for (T t : list) {
             if (t.equals(object))
                 return t;

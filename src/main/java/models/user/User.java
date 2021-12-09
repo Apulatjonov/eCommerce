@@ -1,6 +1,7 @@
-package models;
+package models.user;
 
 import lombok.*;
+import models.BaseModel;
 
 import java.util.Objects;
 
@@ -8,14 +9,15 @@ import java.util.Objects;
 @AllArgsConstructor
 @Data
 @ToString
-public class User extends BaseModel{
-    private String name;
-    private String username;
-    private String password;
-    private Role role;
-    private double balance;
-    private String phoneNumber;
-    private String email;
+public class User extends BaseModel {
+    private String name = "";
+    private String username = "";
+    private String password = "";
+    private Role role = Role.USER;
+    private double balance = 0;
+    private String phoneNumber = "";
+    private String email = "";
+    private boolean isActive = true;
 
     public User(String username){
         this.username = username;

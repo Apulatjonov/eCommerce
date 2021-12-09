@@ -3,11 +3,13 @@ package service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import models.User;
+import models.user.Role;
+import models.user.User;
 import repository.FileUtils;
 import repository.UserRepository;
 import responses.Responses;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -80,6 +82,30 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
         return null;
     }
 
+    public String block(UUID id){
+        return setStatus(id, false);
+    }
+
+    public String activate(UUID id){
+        return setStatus(id, true);
+    }
+
+    public String setStatus(UUID id, boolean status) {
+        int index = 0;
+        List<User> list = getList();
+        for (User user : list) {
+            if (user.getId().equals(id)) {
+                user.setActive(status);
+                list.set(index,user); // blocking user in list
+                writeFile(list); // writing list to file
+                return SUCCESS;
+            }
+            index++;
+        }
+        return USER_NOT_FOUND;
+    }
+
+
     public List<User> fromJson(String json){
         ObjectMapper objectMapper = new ObjectMapper();
         List<User> list = null;
@@ -115,5 +141,18 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
     private void writeFile(List<User> list){
         String json = toJson(list);
         writeToFile(userFileUrl, json);
+    }
+
+
+    public  List<User> getUsersByRole(Role role){
+        List<User> list = getList();
+        List<User> userList = new ArrayList<>();
+
+        for (User user : list) {
+            if (user.getRole().equals(role)){
+                userList.add(user);
+            }
+        }
+        return userList;
     }
 }
