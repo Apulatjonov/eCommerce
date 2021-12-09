@@ -14,19 +14,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-//        new FrontEnd().start();
-        List<User> list = new ArrayList<>();
-        list.add(new User("asx","xasxs","ass", Role.ADMIN,12,"sajknas","xasxsax"));
-        list.add(new User("asx","xasxs","ass", Role.ADMIN,12,"sajknas","xasxsax"));
-
-
-        String json = UserService.toJson(list);
-
-        FileUtils.writeToFile(UserService.userFileUrl, json);
-
-        List<User> users = UserService.fromJson(FileUtils.readFile(UserService.userFileUrl));
-
-
-        System.out.println(users.get(0).getName());
+        UserService userService = new UserService();
+        User user = new User("Oxunjon","oxunjon","12345", Role.ADMIN,5_000_000,"+998905625896","arabboy@gmail.com");
     }
 }

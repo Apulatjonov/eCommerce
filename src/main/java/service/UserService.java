@@ -1,34 +1,32 @@
 package service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.User;
-import repository.BaseRepository;
+import repository.FileUtils;
 import repository.UserRepository;
 import responses.Responses;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.List;
 import java.util.UUID;
 
-public class UserService implements UserRepository, Responses{
+public class UserService extends FileUtils<User> implements UserRepository, Responses{
 
-    public static final String userFileUrl = TOKEN+"userList.txt";
-//    FileOutputStream userFile;
-//
-//    {
-//        try {
-//            userFile = new FileOutputStream(userFileUrl);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public static final String userFileUrl = TOKEN + "userList.json";
 
     @Override
     public String add(User user) {
-        return null;
+        if (checkUser(getList(),user)!=null)
+            return USER_ALREADY_EXIST;
+
+        List<User> userList = getList();
+        userList.add(user);
+
+        String json = toJson(userList);
+        writeToFile(userFileUrl,json);
+
+        return SUCCESS;
     }
 
     @Override
@@ -48,26 +46,33 @@ public class UserService implements UserRepository, Responses{
 
     @Override
     public List<User> getList() {
-        return null;
+        return fromJson(readFile(userFileUrl));
     }
 
     @Override
     public User login(String username, String password) {
-        return null;
+        User user = new User(username,password);
+        return checkUser(getList(),user);
     }
 
-    private boolean checkUser(String username){
-        return true;
-    }
-
-    public static String toJson(List list) throws Exception{
+    public List<User> fromJson(String json){
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
+        List<User> list = null;
+        try {
+            list = objectMapper.readValue(json, new TypeReference<List<User>>() {});
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
-    public static List<User> fromJson(String json) throws Exception{
+    public String toJson(List<User> list){
         ObjectMapper objectMapper = new ObjectMapper();
-        List<User> userList = objectMapper.readValue(json, new TypeReference<List<User>>(){});
-        return userList;
+        try {
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return "Exception";
     }
 }
