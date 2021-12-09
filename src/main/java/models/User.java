@@ -17,9 +17,8 @@ public class User extends BaseModel{
     private String phoneNumber;
     private String email;
 
-    public User(String username, String password){
+    public User(String username){
         this.username = username;
-        this.password = password;
     }
 
     @Override
@@ -27,11 +26,11 @@ public class User extends BaseModel{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return username.equals(user.username) && password.equals(user.password);
+        return username.equals(user.username);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, password);
+        return Objects.hash(username);
     }
 }
