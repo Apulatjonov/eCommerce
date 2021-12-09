@@ -16,5 +16,6 @@ public class Main {
     public static void main(String[] args) throws Exception {
         UserService userService = new UserService();
         User user = new User("Oxunjon","oxunjon","12345", Role.ADMIN,5_000_000,"+998905625896","arabboy@gmail.com");
+        System.out.println("Hi guys");
     }
 }
