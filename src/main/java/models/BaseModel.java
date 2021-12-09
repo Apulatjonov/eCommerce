@@ -1,14 +1,14 @@
 package models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 import java.util.UUID;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-public class BaseModel {
-    private UUID id;
+@Getter
+public abstract class BaseModel {
+    private final UUID id;
+
+    {
+        this.id = UUID.randomUUID();
+    }
 }
