@@ -89,6 +89,9 @@ public abstract class UserFront {
             System.out.println(index + ") " + user.getUsername() + " " + user.getPhoneNumber() + "  | balance: " + user.getBalance() + " | status: " + (user.isActive()?"active" : "blocked"));
             index++;
         }
+
+        if (list.size() == 0)
+            System.out.println("The user list is empty!");
     }
 
     public static int getIntInInterval(int from, int to){

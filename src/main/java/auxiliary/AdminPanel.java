@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public abstract class AdminPanel {
-    public static void run(UserService userService) {
+    public static void run() {
+        UserService userService = new UserService();
         Scanner scannerInt = new Scanner(System.in);
         int stepCode  = 100;
         while (stepCode != 0){
@@ -17,7 +18,7 @@ public abstract class AdminPanel {
 
             switch (stepCode) {
                 case 1 -> {
-                    List<User> userList = userService.getUsersByRole(Role.ADMIN);
+                    List<User> userList = userService.getUsersByRole(Role.USER);
                     UserFront.getUsers(userList);
                 }
                 case 2 -> {
