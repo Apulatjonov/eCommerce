@@ -26,7 +26,8 @@ public abstract class AdminPanel {
                 }
                 case 3 -> {
                     User user = UserFront.addShop();
-                    System.out.println(userService.add(user));
+                    if (user!=null)
+                        System.out.println(userService.add(user));
                 }
                 case 4 -> {
                     User user1 = UserFront.selectUser(userService.getUsersByRole(Role.SHOP));

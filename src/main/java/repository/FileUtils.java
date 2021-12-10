@@ -1,10 +1,6 @@
 package repository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
-import java.util.List;
 
 public abstract class FileUtils<T> {
     public void writeToFile(String fileUrl,String json){
@@ -15,7 +11,8 @@ public abstract class FileUtils<T> {
         }
     }
 
-    public String  readFile(String fileUrl){
+    public String  readFromFile(String fileUrl){
+        createFile(fileUrl);
         String json = "";
         try(BufferedReader bufferedReader = new BufferedReader(new FileReader(fileUrl))){
             String s;
@@ -26,5 +23,15 @@ public abstract class FileUtils<T> {
             e.printStackTrace();
         }
         return json;
+    }
+
+
+    private void createFile(String fileUrl){
+        File file = new File(fileUrl);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

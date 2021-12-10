@@ -19,13 +19,9 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
 
     @Override
     public String add(User user) {
-        if (check(getList(),user)!=null)
-            return USER_ALREADY_EXIST;
-
-        List<User> userList = getList();
+        List<User> userList = getList(); // getting list from file
         userList.add(user); // adding user to list
         writeFile(userList); // writing list to file
-
         return SUCCESS;
     }
 
@@ -71,14 +67,15 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
 
     @Override
     public List<User> getList() {
-        return fromJson(readFile(userFileUrl));
+        return readFile(userFileUrl);
     }
 
     @Override
     public User login(String username, String password) {
-        User checkedUser = check(getList(), new User(username));
-        if (checkedUser.getPassword().equals(password))
-            return checkedUser;
+        for (User user : getList()) {
+            if (user.getUsername().equals(username) && user.getPassword().equals(password))
+                return user;
+        }
         return null;
     }
 
@@ -105,12 +102,61 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
         return USER_NOT_FOUND;
     }
 
+    public  List<User> getUsersByRole(Role role){
+        List<User> list = getList();
+        List<User> userList = new ArrayList<>();
+
+        for (User user : list) {
+            if (user.getRole().equals(role)){
+                userList.add(user);
+            }
+        }
+        return userList;
+    }
+
+    public boolean checkUsername(String username){
+        for (User user : getList()) {
+            if (user.getUsername().equals(username))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean checkPhoneNumber(String phoneNumber){
+        for (User user : getList()) {
+            if (user.getPhoneNumber().equals(phoneNumber))
+                return true;
+        }
+        return false;
+    }
+
+    private User editUser(User newUser, User oldUser){
+        oldUser.setBalance(newUser.getBalance());
+        oldUser.setEmail(newUser.getEmail());
+        oldUser.setUsername(newUser.getUsername());
+        oldUser.setName(newUser.getName());
+        oldUser.setPassword(newUser.getPassword());
+        oldUser.setPhoneNumber(newUser.getPhoneNumber());
+        oldUser.setRole(newUser.getRole());
+        return oldUser;
+    }
+
+    // Working with files
+    private void writeFile(List<User> list){
+        String json = toJson(list);
+        writeToFile(userFileUrl, json);
+    }
+
+    private List<User> readFile(String userFileUrl){
+        return fromJson(readFromFile(userFileUrl));
+    }
 
     public List<User> fromJson(String json){
         ObjectMapper objectMapper = new ObjectMapper();
-        List<User> list = null;
+        List<User> list = new ArrayList<>();
         try {
-            list = objectMapper.readValue(json, new TypeReference<>() {});
+            if(!json.equals(""))
+                list = objectMapper.readValue(json, new TypeReference<>() {});
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -126,33 +172,5 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
         }
         return "EXCEPTION";
     }
-
-    private User editUser(User newUser, User oldUser){
-        oldUser.setBalance(newUser.getBalance());
-        oldUser.setEmail(newUser.getEmail());
-        oldUser.setUsername(newUser.getUsername());
-        oldUser.setName(newUser.getName());
-        oldUser.setPassword(newUser.getPassword());
-        oldUser.setPhoneNumber(newUser.getPhoneNumber());
-        oldUser.setRole(newUser.getRole());
-        return oldUser;
-    }
-
-    private void writeFile(List<User> list){
-        String json = toJson(list);
-        writeToFile(userFileUrl, json);
-    }
-
-
-    public  List<User> getUsersByRole(Role role){
-        List<User> list = getList();
-        List<User> userList = new ArrayList<>();
-
-        for (User user : list) {
-            if (user.getRole().equals(role)){
-                userList.add(user);
-            }
-        }
-        return userList;
-    }
+    //working with files end
 }
