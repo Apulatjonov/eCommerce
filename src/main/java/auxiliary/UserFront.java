@@ -5,7 +5,6 @@ import models.user.Role;
 import models.user.User;
 import service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
