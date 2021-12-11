@@ -34,15 +34,15 @@ public abstract class UserFront {
     public static String addPhoneNumber(UserService userService){
         Scanner scannerStr = new Scanner(System.in);
         boolean inValid = false;
-        String number;
-        do {
+        String number = null;
+        while(number == null || userService.checkPhoneNumber(number) || inValid){
             System.out.print("Enter phone number\n0 -> Back: ");
             number = scannerStr.nextLine();
             if(number.equals("0")) {
                 return null;
             }
             if(userService.checkPhoneNumber(number)){
-                System.out.print("Phone number already exist!\n0 -> Back\n: ");
+                System.out.print("Phone number already exist!\n");
             }
             try {
                 if (!PhoneNumberValidation.checkForValidPhoneNumber(number.toString())) {
@@ -56,7 +56,7 @@ public abstract class UserFront {
                 System.out.println("Something went wrong!");
                 inValid = true;
             }
-        }while(userService.checkPhoneNumber(number) || inValid);
+        };
         return number;
     }
 
@@ -67,7 +67,7 @@ public abstract class UserFront {
             System.out.print("Enter username: ");
             username = scannerStr.nextLine();
             if(userService.checkUsername(username)){
-                System.out.print("Username already exist!\n0 -> Back\n: ");
+                System.out.print("Username already exist!");
             }
             if (username.equals("0"))
                 return null;

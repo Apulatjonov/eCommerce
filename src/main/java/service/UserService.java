@@ -154,15 +154,6 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
         }
     }
 
-    public String toJson(List<User> list){
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return "EXCEPTION";
-    }
     //working with files end
     public User nullify(User user){
         user.setUsername("");
