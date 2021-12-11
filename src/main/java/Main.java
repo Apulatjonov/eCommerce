@@ -1,7 +1,9 @@
 import auxiliary.*;
 import models.user.User;
+import repository.FileUtils;
 import service.UserService;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {

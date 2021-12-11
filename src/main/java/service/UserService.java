@@ -1,6 +1,4 @@
 package service;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.user.Role;
@@ -8,7 +6,6 @@ import models.user.User;
 import repository.FileUtils;
 import repository.UserRepository;
 import responses.Responses;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -16,16 +13,13 @@ import java.util.UUID;
 public class UserService extends FileUtils<User> implements UserRepository, Responses{
 
     public static final String userFileUrl = TOKEN + "userList.json";
-
     {
         isSuperAdminExist();
     }
 
     @Override
     public String add(User user) {
-        List<User> userList = getList(); // getting list from file
-        userList.add(user); // adding user to list
-        writeFile(userList); // writing list to file
+        write(user,userFileUrl);
         return SUCCESS;
     }
 
@@ -49,7 +43,7 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
             if (user.getId().equals(id)) {
                 User editedUser = editUser(newUser,user);
                 list.set(index,editedUser); // editing list
-                writeFile(list); // writing to file
+                writeList(list, userFileUrl); // writing to file
                 return SUCCESS;
             }
             index++;
@@ -64,7 +58,7 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
         for (User user : list) {
             if (user.getId().equals(id)) {
                 list.remove(index); // removing user from list
-                writeFile(list); // writing list to file
+                writeList(list, userFileUrl); // writing list to file
                 return SUCCESS;
             }
             index++;
@@ -74,7 +68,9 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
 
     @Override
     public List<User> getList() {
-        return readFile(userFileUrl);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<User> userList = objectMapper.convertValue(read(userFileUrl), new TypeReference<List<User>>() { });
+        return userList;
     }
 
     @Override
@@ -96,6 +92,7 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
         return setStatus(id, true);
     }
 
+    // to set user active or block
     public String setStatus(UUID id, boolean status) {
         int index = 0;
         List<User> list = getList();
@@ -103,7 +100,7 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
             if (user.getId().equals(id)) {
                 user.setActive(status);
                 list.set(index,user); // blocking user in list
-                writeFile(list); // writing list to file
+                writeList(list,userFileUrl); // writing list to file
                 return SUCCESS;
             }
             index++;
@@ -114,7 +111,6 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
     public  List<User> getUsersByRole(Role role){
         List<User> list = getList();
         List<User> userList = new ArrayList<>();
-
         for (User user : list) {
             if (user.getRole().equals(role)){
                 userList.add(user);
@@ -153,37 +149,9 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
     public  void isSuperAdminExist(){
         List<User> list = getUsersByRole(Role.SUPER_ADMIN);
         if (list.size()==0){
-            User user = new User();
-            user.setUsername("admin");
-            user.setPhoneNumber("+998 90 777 77 77");
-            user.setPassword("admin");
-            user.setRole(Role.SUPER_ADMIN);
-            List<User> userList = getList();
-            userList.add(user);
-            writeFile(userList);
+            User user = new User("Arabboy","admin","admin",Role.SUPER_ADMIN,0,"+998907777777","admin@gmail.com",true);
+            write(user, userFileUrl);
         }
-    }
-
-    // Working with files
-    private void writeFile(List<User> list){
-        String json = toJson(list);
-        writeToFile(userFileUrl, json);
-    }
-
-    private List<User> readFile(String userFileUrl){
-        return fromJson(readFromFile(userFileUrl));
-    }
-
-    public List<User> fromJson(String json){
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<User> list = new ArrayList<>();
-        try {
-            if(!json.equals(""))
-                list = objectMapper.readValue(json, new TypeReference<>() {});
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return list;
     }
 
     public String toJson(List<User> list){
