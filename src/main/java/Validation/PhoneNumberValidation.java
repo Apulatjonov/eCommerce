@@ -1,4 +1,7 @@
-package com.textmagic.sdk;
+package Validation;
+
+import com.google.gson.Gson;
+import models.PhoneNumberValidationCheckModel;
 
 import java.io.IOException;
 import java.net.URI;
@@ -7,9 +10,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.*;
 
-public class HttpApiTester {
+public class PhoneNumberValidation {
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static boolean checkForValidPhoneNumber(String[] args) throws IOException, InterruptedException {
         System.out.print("Insert Phone number: ");
         String number = new Scanner(System.in).nextLine();
         HttpRequest request = HttpRequest.newBuilder()
@@ -19,6 +22,7 @@ public class HttpApiTester {
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
+        PhoneNumberValidationCheckModel model = new Gson().fromJson(response.body(), PhoneNumberValidationCheckModel.class);
+        return model.isPossibleNumber();
     }
 }

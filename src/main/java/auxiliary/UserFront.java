@@ -10,34 +10,17 @@ import java.util.Scanner;
 
 public abstract class UserFront {
     public static User addUser(){
-        UserService userService = new UserService();
         Scanner scannerStr = new Scanner(System.in);
         User user = new User();
 
         System.out.println("Enter name: ");
         user.setName(scannerStr.nextLine());
 
-        do {
-            System.out.println("Enter phone number: ");
-            user.setPhoneNumber(scannerStr.nextLine());
+        System.out.println("Enter phone number: ");
+        user.setPhoneNumber(scannerStr.nextLine());
 
-            if(userService.checkPhoneNumber(user.getPhoneNumber())){
-                System.out.println("Phone number already exist!\n(0 -> Back)");
-            }
-            if(user.getPhoneNumber().equals("0"))
-                return null;
-        } while (userService.checkPhoneNumber(user.getPhoneNumber()));
-
-        do {
-            System.out.println("Enter username: ");
-            user.setUsername(scannerStr.nextLine());
-
-            if(userService.checkUsername(user.getUsername())){
-                System.out.println("Username already exist!\n (0 -> Back)");
-            }
-            if (user.getUsername().equals("0"))
-                return null;
-        } while (userService.checkUsername(user.getUsername()));
+        System.out.println("Enter username: ");
+        user.setUsername(scannerStr.nextLine());
 
         System.out.println("Enter password: ");
         user.setPassword(scannerStr.nextLine());
@@ -58,19 +41,18 @@ public abstract class UserFront {
 
     public static User addShop(){
         User user = addUser();
-        if (user != null)
-            user.setRole(Role.SHOP);
+        user.setRole(Role.SHOP);
         return user;
     }
 
     public static User addSuperAdmin(){
         User user = addUser();
-        if (user != null)
-            user.setRole(Role.SUPER_ADMIN);
+        user.setRole(Role.SUPER_ADMIN);
         return user;
     }
 
     public static User selectUser(List<User> list){
+        Scanner scanner = new Scanner(System.in);
         int index = 1; // getting users by role
         for (User user : list) {
             System.out.println(index + ". " + user.getUsername() + " " + user.getPhoneNumber() + " balance: " + user.getBalance());
@@ -80,6 +62,7 @@ public abstract class UserFront {
         int selected = getIntInInterval(1,index);
         if (selected!=-1)
             return list.get(selected-1);
+
         return null;
     }
 
@@ -89,9 +72,6 @@ public abstract class UserFront {
             System.out.println(index + ") " + user.getUsername() + " " + user.getPhoneNumber() + "  | balance: " + user.getBalance() + " | status: " + (user.isActive()?"active" : "blocked"));
             index++;
         }
-
-        if (list.size() == 0)
-            System.out.println("The user list is empty!");
     }
 
     public static int getIntInInterval(int from, int to){
