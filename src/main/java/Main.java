@@ -10,7 +10,6 @@ public class Main {
         UserService userService = new UserService();
         Scanner scannerInt = new Scanner(System.in);
         int stepCode = 100;
-
         while (stepCode != 0){
             System.out.println("1. Sign in\t 2. Sign up\t 0. Exit");
             stepCode = scannerInt.nextInt();
@@ -28,7 +27,7 @@ public class Main {
                             ShopPanel.run(userService);
                         }
                         case USER -> {
-                            UserPanel.run(userService);
+                            UserPanel.run(userService, logged);
                         }
                     }
                 }
@@ -43,5 +42,6 @@ public class Main {
                 Authentication.signUp();
             }
         }
+
     }
 }

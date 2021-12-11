@@ -1,5 +1,6 @@
 package auxiliary;
 
+import Validation.PhoneNumberValidation;
 import models.user.Role;
 import models.user.User;
 import service.UserService;
@@ -10,27 +11,78 @@ import java.util.Scanner;
 
 public abstract class UserFront {
     public static User addUser(){
+        UserService userService = new UserService();
+        userService.getList();
         Scanner scannerStr = new Scanner(System.in);
         User user = new User();
-
-        System.out.println("Enter name: ");
+        System.out.print("Enter name: ");
         user.setName(scannerStr.nextLine());
 
-        System.out.println("Enter phone number: ");
-        user.setPhoneNumber(scannerStr.nextLine());
+        user.setPhoneNumber(addPhoneNumber(userService));
 
-        System.out.println("Enter username: ");
-        user.setUsername(scannerStr.nextLine());
-
-        System.out.println("Enter password: ");
+        user.setUsername(addUserName(userService));
+        System.out.print("Enter password: ");
         user.setPassword(scannerStr.nextLine());
 
-        System.out.println("Enter email: ");
-        user.setEmail(scannerStr.nextLine());
 
+        user.setEmail(addEmail());
         user.setRole(Role.USER);
         user.setBalance(0);
         return user;
+    }
+
+    public static String addPhoneNumber(UserService userService){
+        Scanner scannerStr = new Scanner(System.in);
+        boolean inValid = false;
+        String number;
+        do {
+            System.out.print("Enter phone number\n0 -> Back: ");
+            number = scannerStr.nextLine();
+            if(number.equals("0")) {
+                return null;
+            }
+            if(userService.checkPhoneNumber(number)){
+                System.out.print("Phone number already exist!\n0 -> Back\n: ");
+            }
+            try {
+                if (!PhoneNumberValidation.checkForValidPhoneNumber(number.toString())) {
+                    System.out.println("Invalid Phone Number!");
+                    inValid = true;
+                }
+                if (PhoneNumberValidation.checkForValidPhoneNumber(number.toString())) {
+                    inValid = false;
+                }
+            }catch (Exception e){
+                System.out.println("Something went wrong!");
+                inValid = true;
+            }
+        }while(userService.checkPhoneNumber(number) || inValid);
+        return number;
+    }
+
+    public static String addUserName(UserService userService){
+        Scanner scannerStr = new Scanner(System.in);
+        String username;
+        do {
+            System.out.print("Enter username: ");
+            username = scannerStr.nextLine();
+            if(userService.checkUsername(username)){
+                System.out.print("Username already exist!\n0 -> Back\n: ");
+            }
+            if (username.equals("0"))
+                return null;
+        }while(userService.checkUsername(username));
+        return username;
+    }
+
+    public static String addEmail(){
+        Scanner scannerStr = new Scanner(System.in);
+        String email;
+        do{
+            System.out.print("Enter email: ");
+            email = scannerStr.nextLine();
+        }while (email.length() < 10 || !email.substring(email.length() - 10).equals("@gmail.com"));
+        return email;
     }
 
     public static User addAdmin(){

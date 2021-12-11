@@ -40,6 +40,9 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
 
     @Override
     public String edit(UUID id, User newUser) {
+        if (newUser == null){
+            return SOMETHING_WENT_WRONG;
+        }
         int index = 0;
         List<User> list = getList();
         for (User user : list) {
@@ -76,6 +79,8 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
 
     @Override
     public User login(String username, String password) {
+        if(getList().isEmpty())
+            return null;
         for (User user : getList()) {
             if (user.getUsername().equals(username) && user.getPassword().equals(password))
                 return user;
@@ -191,4 +196,12 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
         return "EXCEPTION";
     }
     //working with files end
+    public User nullify(User user){
+        user.setUsername("");
+        user.setBalance(0);
+        user.setEmail("");
+        user.setName("");
+        user.setPhoneNumber("");
+        return user;
+    }
 }

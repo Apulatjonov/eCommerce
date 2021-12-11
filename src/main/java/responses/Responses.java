@@ -6,4 +6,5 @@ public interface Responses {
     String SUCCESS = "SUCCESSFULLY_COMPLETED";
     String USER_NOT_FOUND = "USER_NOT_FOUND";
     String PRODUCT_NOT_FOUND = "USER_NOT_FOUND";
+    String SOMETHING_WENT_WRONG = "Something went wrong!";
 }

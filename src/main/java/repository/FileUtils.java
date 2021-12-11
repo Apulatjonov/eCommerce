@@ -26,7 +26,7 @@ public abstract class FileUtils<T> {
     }
 
 
-    private void createFile(String fileUrl){
+    private void createFile(String fileUrl) {
         File file = new File(fileUrl);
         try {
             file.createNewFile();
