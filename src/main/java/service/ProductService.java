@@ -15,8 +15,18 @@ import java.util.UUID;
 public class ProductService extends FileUtils<Product> implements ProductRepository, Responses {
     public static final String productFileUrl = TOKEN + "productList.json";
 
+    public void addProduct(){
+        Product product = new Product();
+
+        System.out.println("");
+
+        add(product);
+    }
+
     @Override
     public String add(Product product) {
+
+
         List<Product> productList = getList(); // getting list from file
         productList.add(product); // adding product to list
         writeFile(productList); // writing list to file

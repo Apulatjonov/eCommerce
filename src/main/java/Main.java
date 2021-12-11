@@ -26,7 +26,7 @@ public class Main {
                             AdminPanel.run(userService);
                         }
                         case SHOP -> {
-                            ShopPanel.run(userService);
+                            ShopPanel.run();
                         }
                         case USER -> {
                             UserPanel.run(userService, logged);
