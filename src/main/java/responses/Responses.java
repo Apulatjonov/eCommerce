@@ -5,4 +5,5 @@ public interface Responses {
     String USER_ALREADY_EXIST = "USER_ALREADY_EXIST";
     String SUCCESS = "SUCCESSFULLY_COMPLETED";
     String USER_NOT_FOUND = "USER_NOT_FOUND";
+    String PRODUCT_NOT_FOUND = "USER_NOT_FOUND";
 }
