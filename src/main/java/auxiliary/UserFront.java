@@ -104,4 +104,18 @@ public abstract class UserFront {
         }
         return selected;
     }
+
+    public static void activateOrBlock(User user){
+        UserService userService = new UserService();
+        if (user != null) {
+            System.out.println("1. Block user\t 2. Activate user");
+
+            int operation = UserFront.getIntInInterval(1, 2);
+            if (operation == 1)
+                System.out.println(userService.block(user.getId()));
+            else if (operation == 2)
+                System.out.println(userService.activate(user.getId()));
+        }
+    }
+
 }

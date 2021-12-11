@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public abstract class AdminPanel {
-    public static void run() {
-        UserService userService = new UserService();
+    public static void run(UserService userService) {
         Scanner scannerInt = new Scanner(System.in);
         int stepCode  = 100;
         while (stepCode != 0){
@@ -33,13 +32,7 @@ public abstract class AdminPanel {
                 case 4 -> {
                     User user1 = UserFront.selectUser(userService.getUsersByRole(Role.SHOP));
                     if (user1 != null) {
-                        System.out.println("1. Block user\t 2. Activate user");
-
-                        int operation = UserFront.getIntInInterval(1, 2);
-                        if (operation == 1)
-                            System.out.println(userService.block(user1.getId()));
-                        else if (operation == 2)
-                            System.out.println(userService.activate(user1.getId()));
+                        UserFront.activateOrBlock(user1);
                     }
                 }
                 case 5 -> {

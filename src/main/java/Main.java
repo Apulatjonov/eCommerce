@@ -1,10 +1,13 @@
 import auxiliary.*;
 import models.user.User;
+import service.UserService;
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args){
+
+        UserService userService = new UserService();
         Scanner scannerInt = new Scanner(System.in);
         int stepCode = 100;
 
@@ -16,16 +19,16 @@ public class Main {
                 if (logged != null && logged.isActive()){
                     switch (logged.getRole()){
                         case SUPER_ADMIN -> {
-                            SuperAdminPanel.run();
+                            SuperAdminPanel.run(userService);
                         }
                         case ADMIN -> {
-                            AdminPanel.run();
+                            AdminPanel.run(userService);
                         }
                         case SHOP -> {
-                            ShopPanel.run();
+                            ShopPanel.run(userService);
                         }
                         case USER -> {
-                            UserPanel.run();
+                            UserPanel.run(userService);
                         }
                     }
                 }

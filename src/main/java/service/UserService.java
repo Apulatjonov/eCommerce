@@ -17,6 +17,10 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
 
     public static final String userFileUrl = TOKEN + "userList.json";
 
+    {
+        isSuperAdminExist();
+    }
+
     @Override
     public String add(User user) {
         List<User> userList = getList(); // getting list from file
@@ -139,6 +143,20 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
         oldUser.setPhoneNumber(newUser.getPhoneNumber());
         oldUser.setRole(newUser.getRole());
         return oldUser;
+    }
+
+    public  void isSuperAdminExist(){
+        List<User> list = getUsersByRole(Role.SUPER_ADMIN);
+        if (list.size()==0){
+            User user = new User();
+            user.setUsername("admin");
+            user.setPhoneNumber("+998 90 777 77 77");
+            user.setPassword("admin");
+            user.setRole(Role.SUPER_ADMIN);
+            List<User> userList = getList();
+            userList.add(user);
+            writeFile(userList);
+        }
     }
 
     // Working with files
