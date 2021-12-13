@@ -73,12 +73,32 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
         return userList;
     }
 
+    public User loginByBot(String phoneNumber, String password) {
+        if(getList().isEmpty())
+            return null;
+        for (User user : getList()) {
+            if (user.getPhoneNumber().equals(phoneNumber) && user.getPassword().equals(password))
+                return user;
+        }
+        return null;
+    }
+
     @Override
     public User login(String username, String password) {
         if(getList().isEmpty())
             return null;
         for (User user : getList()) {
             if (user.getUsername().equals(username) && user.getPassword().equals(password))
+                return user;
+        }
+        return null;
+    }
+
+    public User loginUser(String phoneNumber, String password) {
+        if(getList().isEmpty())
+            return null;
+        for (User user : getList()) {
+            if (user.getPhoneNumber().equals(phoneNumber) && user.getPassword().equals(password))
                 return user;
         }
         return null;
@@ -129,7 +149,7 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
 
     public boolean checkPhoneNumber(String phoneNumber){
         for (User user : getList()) {
-            if (user.getPhoneNumber().equals(phoneNumber))
+            if (user.getPhoneNumber() != null && user.getPhoneNumber().equals(phoneNumber))
                 return true;
         }
         return false;
@@ -146,7 +166,7 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
         return oldUser;
     }
 
-    public  void isSuperAdminExist(){
+    public void isSuperAdminExist(){
         List<User> list = getUsersByRole(Role.SUPER_ADMIN);
         if (list.size()==0){
             User user = new User("Arabboy","admin","admin",Role.SUPER_ADMIN,0,"+998907777777","admin@gmail.com",true);

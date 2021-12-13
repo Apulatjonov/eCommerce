@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.Category;
 import models.Product;
+import models.user.Role;
 import models.user.User;
 import repository.CategoryRepository;
 import repository.FileUtils;
@@ -18,6 +19,14 @@ public class CategoryService extends FileUtils<Category> implements CategoryRepo
 
     public static final String categoryFileUrl = TOKEN + "categoryList.json";
 
+    {
+        initialize();
+    }
+
+    public void initialize(){
+        Category category = new Category("Default");
+        write(category, categoryFileUrl);
+    }
 
     @Override
     public String add(Category category) {
@@ -78,7 +87,7 @@ public class CategoryService extends FileUtils<Category> implements CategoryRepo
     public void getCategories(List<Category> list){
         int index = 1;
         for (Category category : list) {
-            System.out.println(index + ") " + category.getId() + " " + category.getName());
+            System.out.println(index + ") " +  " " + category.getName());
             index++;
         }
     }

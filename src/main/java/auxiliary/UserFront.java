@@ -31,6 +31,40 @@ public abstract class UserFront {
         return user;
     }
 
+    public static void balance(User user){
+        while(true) {
+            System.out.println("1 -> Get current balance");
+            System.out.println("2 -> Fill the balance");
+            System.out.println("3 -> Back");
+            int ans = new Scanner(System.in).nextInt();
+            switch (ans) {
+                case 1: {
+                    getBalance(user);
+                    break;
+                }
+                case 2: {
+                    user = fillBalance(user);
+                    break;
+                }
+                case 3: {
+                    return;
+                }
+            }
+        }
+    }
+
+    public static User fillBalance(User user){
+        System.out.print("Insert amount: ");
+        double amount = new Scanner(System.in).nextDouble();
+        user.setBalance(user.getBalance() + amount);
+        return user;
+    }
+
+    public static void getBalance(User user){
+        System.out.println("Current balance: " + user.getBalance());
+    }
+
+
     public static String addPhoneNumber(UserService userService){
         Scanner scannerStr = new Scanner(System.in);
         boolean inValid = false;

@@ -29,7 +29,7 @@ public abstract class UserPanel {
                     UserFront.getUsers(shopList);
                 }
                 case 3 -> {
-//                    User user = UserFront.addShop();
+                    UserFront.balance(user);
                     if (user!=null)
                         System.out.println(userService.add(user));
                 }
@@ -38,11 +38,6 @@ public abstract class UserPanel {
                     if (user1 != null) {
                         UserFront.activateOrBlock(user1);
                     }
-                }
-                case 5 -> {
-                    User shop = UserFront.selectUser(userService.getUsersByRole(Role.SHOP));
-                    if (shop != null)
-                        System.out.println(userService.remove(shop.getId()));
                 }
             }
         }
