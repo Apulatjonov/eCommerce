@@ -14,19 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class CategoryService extends FileUtils<Product> implements CategoryRepository, Responses {
+public class CategoryService extends FileUtils<Category> implements CategoryRepository, Responses {
 
     public static final String categoryFileUrl = TOKEN + "categoryList.json";
 
 
-
     @Override
     public String add(Category category) {
-        if(isExistscategory(category.getName()))
-            return CATEGORY_ALREADY_EXISTS;
-        List<Category> categoryList = getList(); // getting list from file
-        categoryList.add(category); // adding user to list
-        writeFile(categoryList); // writing list to file
+        write(category, categoryFileUrl);
         return SUCCESS;
     }
 
@@ -41,19 +36,22 @@ public class CategoryService extends FileUtils<Product> implements CategoryRepos
 
     @Override
     public String edit(UUID id, Category newCategory) {
+        if(newCategory == null)
+            return SOMETHING_WENT_WRONG;
         int index = 0;
         List<Category> list = getList();
-        for (Category category : list) {
-            if (category.getId().equals(id)) {
-                Category editedCategory = editCategory(newCategory,category);
-                list.set(index,editedCategory); // editing list
-                writeFile(list); // writing to file
+        for(Category category: list) {
+            if(category.getId().equals(id)) {
+                Category editedCategory = editCategory(newCategory, category);
+                list.set(index, editedCategory);
+                writeList(list, categoryFileUrl);
                 return SUCCESS;
             }
             index++;
         }
-        return USER_NOT_FOUND;
+        return CATEGORY_NOT_FOUND;
     }
+
 
     @Override
     public String remove(UUID id) {
@@ -61,20 +59,21 @@ public class CategoryService extends FileUtils<Product> implements CategoryRepos
         List<Category> list = getList();
         for (Category category : list) {
             if (category.getId().equals(id)) {
-                list.remove(index); // removing user from list
-                writeFile(list); // writing list to file
+                list.remove(index);
+                writeList(list, categoryFileUrl); // writing list to file
                 return SUCCESS;
             }
             index++;
         }
-        return USER_NOT_FOUND;
+        return CATEGORY_NOT_FOUND;
     }
 
     @Override
     public List<Category> getList() {
-        return readFile(categoryFileUrl);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Category> categoryList = objectMapper.convertValue(read(categoryFileUrl), new TypeReference<List<Category>>() { });
+        return categoryList;
     }
-
 
     public void getCategories(List<Category> list){
         int index = 1;
@@ -84,54 +83,8 @@ public class CategoryService extends FileUtils<Product> implements CategoryRepos
         }
     }
 
-    private boolean isExistscategory(String name) {
-        for (Category category : getList()) {
-            if (category.getName().equals(name))
-                return true;
-        }
-        return false;
-    }
-
-
     private Category editCategory(Category newCategory, Category oldCategory){
         oldCategory.setName(newCategory.getName());
         return oldCategory;
     }
-
-
-
-
-    // Working with files
-    private void writeFile(List<Category> list){
-        String json = toJson(list);
-        writeToFile(categoryFileUrl, json);
-    }
-
-    private List<Category> readFile(String categoryFileUrl){
-        return fromJson(readFromFile(categoryFileUrl));
-    }
-
-    public List<Category> fromJson(String json){
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<Category> list = new ArrayList<>();
-        try {
-            if(!json.equals(""))
-                list = objectMapper.readValue(json, new TypeReference<>() {});
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    public String toJson(List<Category> list){
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return "EXCEPTION";
-    }
-    //working with files end
-
 }
