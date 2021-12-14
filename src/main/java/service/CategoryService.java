@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.Category;
 import models.Product;
-import models.user.Role;
 import models.user.User;
 import repository.CategoryRepository;
 import repository.FileUtils;
@@ -16,17 +15,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class CategoryService extends FileUtils<Category> implements CategoryRepository, Responses {
-
     public static final String categoryFileUrl = TOKEN + "categoryList.json";
 
-    {
-        initialize();
-    }
-
-    public void initialize(){
-        Category category = new Category("Default");
-        write(category, categoryFileUrl);
-    }
 
     @Override
     public String add(Category category) {
@@ -82,14 +72,6 @@ public class CategoryService extends FileUtils<Category> implements CategoryRepo
         ObjectMapper objectMapper = new ObjectMapper();
         List<Category> categoryList = objectMapper.convertValue(read(categoryFileUrl), new TypeReference<List<Category>>() { });
         return categoryList;
-    }
-
-    public void getCategories(List<Category> list){
-        int index = 1;
-        for (Category category : list) {
-            System.out.println(index + ") " +  " " + category.getName());
-            index++;
-        }
     }
 
     private Category editCategory(Category newCategory, Category oldCategory){

@@ -8,14 +8,13 @@ import service.ProductService;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 public abstract class ShopPanel {
     public static void run(User shop){
 
-        ProductService productService1 = new ProductService();
+        ProductService productService = new ProductService();
         CategoryService categoryService = new CategoryService();
-
-        System.out.println("Shop frontend codes will be here!");
 
         Scanner scannerInt = new Scanner(System.in);
         Scanner scannerStr = new Scanner(System.in);
@@ -27,29 +26,33 @@ public abstract class ShopPanel {
                     "\t 5.Edit Product\t 6.Set Discount\t 7.Statistics/List\t 8.Date");
             stepCode = scannerInt.nextInt();
 
+            Consumer<List<Category>> showCategoryList = categoryList -> {   // this is a lambda expression which shows all categories
+                int index = 1;
+                for (Category category : categoryList) {
+                    System.out.println(index + ") " + category.getName());
+                    index++;
+                }
+            };
+            List<Category> categoryList = categoryService.getList();   // getting all the categories to the categoryList list
+            List<Product> products = productService.getList();         // getting all the products to products list
             switch (stepCode){
-                case 1: // Get product list
-                    List<Product> products = productService1.getList();
-                    getProducts(products);
-                    break;
-                case 2: // get product list by category
+                case 1 -> {
+                    showProducts(products);
+                }
+
+                case 2 -> {
                     System.out.println("Select the Category to add Product");
-                    List<Category> categoryList = categoryService.getList();
-                    categoryService.getCategories(categoryList);
+                    showCategoryList.accept(categoryList);
                     int categoryNum = scannerInt.nextInt() - 1;
-
-                    products =  productService1.getProductsByCategory(categoryList.get(categoryNum).getId());
-                    getProducts(products);
-                    break;
-                case 3: // add product
+                    products =  productService.getProductsByCategory(categoryList.get(categoryNum).getId());
+                    showProducts(products);
+                }
+                case 3 -> {
                     System.out.println("Select the Category to add Product");
-                    List<Category> categoryList1 = categoryService.getList();
-                    categoryService.getCategories(categoryList1);
-
-                    categoryNum = scannerInt.nextInt() - 1;
-
+                    showCategoryList.accept(categoryList);
+                    int categoryNum = scannerInt.nextInt() - 1;
                     Product product = new Product();
-                    product.setCategoryId(categoryList1.get(categoryNum).getId());
+                    product.setCategoryId(categoryList.get(categoryNum).getId());
                     product.setShopId(shop.getId());
 
                     System.out.println("Enter name: ");
@@ -67,49 +70,39 @@ public abstract class ShopPanel {
                     System.out.println("Enter discount: ");
                     product.setDiscount(scannerInt.nextDouble());
 
-                    productService1.add(product);
-                    break;
-                case 4: // delete product
+                    productService.add(product);
+                }
+                case 4 -> {
                     System.out.println("Select the product order (index): ");
-                    products = productService1.getList();
-                    getProducts(products);
+                    products = productService.getList();
+                    showProducts(products);
                     int productIndex = scannerInt.nextInt() - 1;
+                    productService.remove(products.get(productIndex).getId());
+                }
+                case 5 -> {
+                    System.out.println("This is gonna work in our bot! ");
+                }
 
-                    productService1.remove(products.get(productIndex).getId());
-                    break;
-                case 5:
-
-                    break;
-
-                case 6:
-
-                    break;
-
-                case 7:
-
-                    break;
-
-                case 8:
-
-                    break;
-
+                case 6 -> {
+                    System.out.println("This is gonna work in our bot");
+                }
+                case 7 -> {
+                    System.out.println("This is gonna work in our bot!");
+                }
+                case 8 -> {
+                    System.out.println("This is gonna work in our bot ");
+                }
             }
         }
-
     }
 
-    public static void getProducts(List<Product> products){
+    public static void showProducts(List<Product> products){
         int index = 1;
         for (Product product : products) {
-            System.out.println(index + ") Name:" + product.getName() + ", price: " + product.getPrice()
-                    + ", netPrice: " + product.getNetPrice() + "  | quantity: " + product.getQuantity()
-                    + ", discount: " + product.getDiscount());
+            System.out.println(index + ") Name:" + product.getName() + "| price: " + product.getPrice()
+                    + "| netPrice: " + product.getNetPrice() + " | quantity: " + product.getQuantity()
+                    + "| discount: " + product.getDiscount());
             index++;
         }
     }
-
-
-
-
-
 }

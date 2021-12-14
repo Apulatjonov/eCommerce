@@ -5,7 +5,7 @@ import java.util.*;
 
 public class FrontEnd {
 
-    public void start(){
+    public void start() {
         loop : while(true){
             System.out.println(Responses.MAIN_MENU);
             int answer = getInt();

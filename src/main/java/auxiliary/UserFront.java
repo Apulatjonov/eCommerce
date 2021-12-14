@@ -24,7 +24,6 @@ public abstract class UserFront {
         System.out.print("Enter password: ");
         user.setPassword(scannerStr.nextLine());
 
-
         user.setEmail(addEmail());
         user.setRole(Role.USER);
         user.setBalance(0);

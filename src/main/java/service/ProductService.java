@@ -79,12 +79,12 @@ public class ProductService extends FileUtils<Product> implements ProductReposit
         return productList;
     }
 
-    private Product editProduct(Product newProduct, Product oldProduct){
+    private Product editProduct(Product newProduct, Product oldProduct) {
         oldProduct.setPrice(newProduct.getPrice());
         oldProduct.setDiscount(newProduct.getDiscount());
         oldProduct.setQuantity(newProduct.getQuantity());
         oldProduct.setCategoryId(newProduct.getCategoryId());
+        oldProduct.setName(newProduct.getName());
         return oldProduct;
     }
-
 }
