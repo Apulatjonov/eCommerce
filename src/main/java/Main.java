@@ -30,7 +30,7 @@ public class Main {
                                 AdminPanel.run(userService);
                             }
                             case SHOP -> {
-                                ShopPanel.run();
+                                ShopPanel.run(logged);
                             }
                             case USER -> {
                                 UserPanel.run(userService, logged);
@@ -52,7 +52,7 @@ public class Main {
                                 AdminPanel.run(userService);
                             }
                             case SHOP -> {
-                                ShopPanel.run();
+                                ShopPanel.run(logged);
                             }
                             case USER -> {
                                 UserPanel.run(userService, logged);
@@ -74,7 +74,7 @@ public class Main {
                                 AdminPanel.run(userService);
                             }
                             case SHOP -> {
-                                ShopPanel.run();
+                                ShopPanel.run(logged);
                             }
                             case USER -> {
                                 UserPanel.run(userService, logged);

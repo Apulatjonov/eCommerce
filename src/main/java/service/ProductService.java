@@ -69,6 +69,16 @@ public class ProductService extends FileUtils<Product> implements ProductReposit
         return productList;
     }
 
+    public  List<Product> getProductsByCategory(UUID categoryId){
+        List<Product> productList = new ArrayList<>();
+        for (Product product : getList()) {
+            if (product.getCategoryId().equals(categoryId)){
+                productList.add(product);
+            }
+        }
+        return productList;
+    }
+
     private Product editProduct(Product newProduct, Product oldProduct){
         oldProduct.setPrice(newProduct.getPrice());
         oldProduct.setDiscount(newProduct.getDiscount());

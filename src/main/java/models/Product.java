@@ -10,10 +10,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class Product extends BaseModel{
-    private UUID categoryId;
-    private UUID shopId;
-    private int quantity;
+    private String name;
     private double price;
+    private double netPrice;
+    private int quantity;
     private double discount;
     private String photo;
+    private UUID categoryId;
+    private UUID shopId;
 }
