@@ -3,6 +3,7 @@ package auxiliary;
 import models.Category;
 import models.Product;
 import models.user.User;
+import repository.BaseRepository;
 import responses.Responses;
 import service.CategoryService;
 import service.ProductService;
@@ -80,6 +81,9 @@ public abstract class ShopPanel {
                     System.out.println("Enter discount: ");
                     product.setDiscount(scannerInt.nextDouble());
 
+                    System.out.println("Enter image url: ");
+                    product.setPhoto( BaseRepository.TOKEN + "images\\" + scannerStr.nextLine());
+
                     System.out.println(productService.add(product));
                 }
                 case 4 -> {
@@ -120,6 +124,9 @@ public abstract class ShopPanel {
                     System.out.println("Discount: ");
                     product.setDiscount(scannerInt.nextDouble());
 
+                    System.out.println("Enter image url: ");
+                    product.setPhoto( BaseRepository.TOKEN + "images\\" + scannerStr.nextLine());
+
 
                     System.out.println(productService.edit(products.get(productIndex).getId(), product));
 
@@ -155,7 +162,7 @@ public abstract class ShopPanel {
         for (Product product : products) {
             System.out.println(index + ") Name:" + product.getName() + "| price: " + product.getPrice()
                     + "| netPrice: " + product.getNetPrice() + " | quantity: " + product.getQuantity()
-                    + "| discount: " + product.getDiscount());
+                    + "| discount: " + product.getDiscount() + "| photo: " + product.getPhoto());
             index++;
         }
     }
