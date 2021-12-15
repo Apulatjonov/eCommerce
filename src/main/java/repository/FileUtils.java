@@ -9,6 +9,7 @@ import java.util.List;
 
 public abstract class FileUtils<T> {
 
+
     public void write(T t, String fileUrl){
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -22,6 +23,10 @@ public abstract class FileUtils<T> {
 
     public  List<T> read(String fileUrl){
         ObjectMapper objectMapper = new ObjectMapper();
+        if (new File(fileUrl).length()==0){
+            writeList(new ArrayList<>(), fileUrl);
+        }
+
         List<T> list = new ArrayList<>();
         try {
             list = objectMapper.readValue(new File(fileUrl), new TypeReference< ArrayList <T>>(){});

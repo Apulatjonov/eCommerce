@@ -10,17 +10,24 @@ import java.util.List;
 import java.util.Scanner;
 
 public abstract class UserFront {
-    public static User addUser(){
+    static Scanner scannerStr = new Scanner(System.in);
+    static Scanner scannerInt = new Scanner(System.in);
+    public static User addUser() {
         UserService userService = new UserService();
-        userService.getList();
-        Scanner scannerStr = new Scanner(System.in);
         User user = new User();
         System.out.print("Enter name: ");
         user.setName(scannerStr.nextLine());
 
-        user.setPhoneNumber(addPhoneNumber(userService));
+        String phoneNumber = addPhoneNumber(user);
+        if(phoneNumber == null)
+            return null;
+        user.setPhoneNumber(phoneNumber);
 
-        user.setUsername(addUserName(userService));
+        String username = addUserName(user);
+        if(username == null)
+            return null;
+        user.setUsername(username);
+
         System.out.print("Enter password: ");
         user.setPassword(scannerStr.nextLine());
 
@@ -34,8 +41,8 @@ public abstract class UserFront {
         while(true) {
             System.out.println("1 -> Get current balance");
             System.out.println("2 -> Fill the balance");
-            System.out.println("3 -> Back");
-            int ans = new Scanner(System.in).nextInt();
+            System.out.println("0 -> Back");
+            int ans = scannerInt.nextInt();
             switch (ans) {
                 case 1: {
                     getBalance(user);
@@ -45,7 +52,7 @@ public abstract class UserFront {
                     user = fillBalance(user);
                     break;
                 }
-                case 3: {
+                case 0: {
                     return;
                 }
             }
@@ -54,7 +61,7 @@ public abstract class UserFront {
 
     public static User fillBalance(User user){
         System.out.print("Insert amount: ");
-        double amount = new Scanner(System.in).nextDouble();
+        double amount = scannerInt.nextDouble();
         user.setBalance(user.getBalance() + amount);
         return user;
     }
@@ -63,53 +70,55 @@ public abstract class UserFront {
         System.out.println("Current balance: " + user.getBalance());
     }
 
-
-    public static String addPhoneNumber(UserService userService){
-        Scanner scannerStr = new Scanner(System.in);
+    private static String addPhoneNumber(User user){
+        UserService userService = new UserService();
         boolean inValid = false;
-        String number = null;
-        while(number == null || userService.checkPhoneNumber(number) || inValid){
-            System.out.print("Enter phone number\n0 -> Back: ");
-            number = scannerStr.nextLine();
-            if(number.equals("0")) {
+        String phoneNumber = null;
+        while(phoneNumber!= null || userService.checkPhoneNumber(phoneNumber) || inValid) {
+            System.out.println("Enter phoneNumber(Press '0' to go back): ");
+            phoneNumber = scannerStr.nextLine();
+            if(phoneNumber.equals("0")) {
                 return null;
-            }
-            if(userService.checkPhoneNumber(number)){
-                System.out.print("Phone number already exist!\n");
+            } else if(userService.checkPhoneNumber(phoneNumber)){
+                System.out.println("This phone number already exist!");
             }
             try {
-                if (!PhoneNumberValidation.checkForValidPhoneNumber(number.toString())) {
+                if (!PhoneNumberValidation.checkForValidPhoneNumber(phoneNumber)) {
                     System.out.println("Invalid Phone Number!");
                     inValid = true;
                 }
-                if (PhoneNumberValidation.checkForValidPhoneNumber(number.toString())) {
+                if (PhoneNumberValidation.checkForValidPhoneNumber(phoneNumber)) {
                     inValid = false;
                 }
             }catch (Exception e){
                 System.out.println("Something went wrong!");
                 inValid = true;
             }
-        };
-        return number;
+        }
+        return phoneNumber;
     }
 
-    public static String addUserName(UserService userService){
-        Scanner scannerStr = new Scanner(System.in);
+    private static String addUserName(User user){
+        UserService userService = new UserService();
         String username;
         do {
             System.out.print("Enter username: ");
             username = scannerStr.nextLine();
-            if(userService.checkUsername(username)){
+            while(username.length() == 0) {
+                System.out.println("Enter username(Press '0' to go back): ");
+                username = scannerStr.nextLine();
+                if(username.equals("0"))
+                    return null;
+            }
+            if(userService.checkUsername(username)) {
                 System.out.print("Username already exist!");
             }
-            if (username.equals("0"))
-                return null;
-        }while(userService.checkUsername(username));
+        } while(!userService.checkUsername(username));
         return username;
     }
 
+
     public static String addEmail(){
-        Scanner scannerStr = new Scanner(System.in);
         String email;
         do{
             System.out.print("Enter email: ");
@@ -137,8 +146,7 @@ public abstract class UserFront {
     }
 
     public static User selectUser(List<User> list){
-        Scanner scanner = new Scanner(System.in);
-        int index = 1; // getting users by role
+        int index = 1;                                  // getting users by role
         for (User user : list) {
             System.out.println(index + ". " + user.getUsername() + " " + user.getPhoneNumber() + " balance: " + user.getBalance());
             index++;

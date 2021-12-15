@@ -13,13 +13,13 @@ public abstract class UserPanel {
         Scanner scannerInt = new Scanner(System.in);
         int stepCode  = 100;
         while (stepCode != 0){
-            System.out.println("1. Edit account\t 2. Market\t 3. Balance\t 4. Exit");
+            System.out.println("1. Edit account\t 2. Market\t 3. Balance\t 0. Exit");
             stepCode = scannerInt.nextInt();
 
             switch (stepCode) {
                 case 1 -> {
                     UUID id = user.getId();
-                    user = userService.nullify(user);
+//                    user = userService.nullify(user);
                     userService.edit(id, user);
                     User newUser = UserFront.addUser();
                     System.out.println(userService.edit(id, newUser));
@@ -32,12 +32,6 @@ public abstract class UserPanel {
                     UserFront.balance(user);
                     if (user!=null)
                         System.out.println(userService.add(user));
-                }
-                case 4 -> {
-                    User user1 = UserFront.selectUser(userService.getUsersByRole(Role.SHOP));
-                    if (user1 != null) {
-                        UserFront.activateOrBlock(user1);
-                    }
                 }
             }
         }

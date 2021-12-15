@@ -174,7 +174,6 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
         }
     }
 
-    //working with files end
     public User nullify(User user){
         user.setUsername("");
         user.setBalance(0);

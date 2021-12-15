@@ -116,7 +116,7 @@ public abstract class AdminPanel {
             if(index == ind) {
                 return category;
             }
-            ind++;                                    // this was added to our old code
+            ind++;                                                        // this was added to our old code
         }
         return null;
     }
