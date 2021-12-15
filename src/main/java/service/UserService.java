@@ -98,7 +98,7 @@ public class UserService extends FileUtils<User> implements UserRepository, Resp
         if(getList().isEmpty())
             return null;
         for (User user : getList()) {
-            if (user.getPhoneNumber().equals(phoneNumber) && user.getPassword().equals(password))
+            if (user.getPhoneNumber() != null && user.getPhoneNumber().equals(phoneNumber) && user.getPassword().equals(password))
                 return user;
         }
         return null;

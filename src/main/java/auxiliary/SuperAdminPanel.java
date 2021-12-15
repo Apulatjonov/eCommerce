@@ -4,7 +4,9 @@ import models.user.Role;
 import models.user.User;
 import service.UserService;
 
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.MissingFormatArgumentException;
 import java.util.Scanner;
 
 public abstract class SuperAdminPanel {
@@ -12,9 +14,15 @@ public abstract class SuperAdminPanel {
         Scanner scannerInt = new Scanner(System.in);
         int stepCode  = 100;
         while (stepCode != 0){
-            System.out.println("1.Admin list\t 2.Add admin\t 3.Activate & Block admin\t 4.Remove admin");
-            stepCode = scannerInt.nextInt();
-
+            while(stepCode != 1 && stepCode != 2 && stepCode != 3 && stepCode != 4 && stepCode != 0) {
+                System.out.println("1.Admin list\t 2.Add admin\t 3.Activate & Block admin\t 4.Remove admin");
+                try {
+                    stepCode = scannerInt.nextInt();
+                }
+                catch (InputMismatchException e){
+                    System.out.println("Wrong insertion!");
+                }
+            }
             switch (stepCode) {
                 case 1 -> {
                     List<User> userList = userService.getUsersByRole(Role.ADMIN);

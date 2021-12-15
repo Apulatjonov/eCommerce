@@ -4,6 +4,7 @@ import models.user.Role;
 import models.user.User;
 import service.UserService;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
@@ -13,13 +14,18 @@ public abstract class UserPanel {
         Scanner scannerInt = new Scanner(System.in);
         int stepCode  = 100;
         while (stepCode != 0){
-            System.out.println("1. Edit account\t 2. Market\t 3. Balance\t 0. Exit");
-            stepCode = scannerInt.nextInt();
-
+            while(stepCode != 0 && stepCode != 1 && stepCode != 2 && stepCode != 3) {
+                System.out.println("1. Edit account\t 2. Market\t 3. Balance\t 0. Exit");
+                try{
+                    stepCode = scannerInt.nextInt();
+                }catch (InputMismatchException e){
+                    System.out.println("Wrong Insertion!");
+                }
+            }
             switch (stepCode) {
                 case 1 -> {
                     UUID id = user.getId();
-//                    user = userService.nullify(user);
+                    user = userService.nullify(user);
                     userService.edit(id, user);
                     User newUser = UserFront.addUser();
                     System.out.println(userService.edit(id, newUser));

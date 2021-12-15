@@ -22,6 +22,9 @@ public abstract class FileUtils<T> {
     }
 
     public  List<T> read(String fileUrl){
+        if (new File(fileUrl).length()==0){
+            writeList(new ArrayList<>(), fileUrl);
+        }
         ObjectMapper objectMapper = new ObjectMapper();
         if (new File(fileUrl).length()==0){
             writeList(new ArrayList<>(), fileUrl);
