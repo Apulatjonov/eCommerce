@@ -2,12 +2,11 @@ package repository;
 
 import models.order.Order;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public interface OrderRepository extends BaseRepository<Order, String, List<Order>>{
 
-    List<Order> orders = new ArrayList<>();
+    Map<UUID, List<Order>> orders = new HashMap<>(); // UUID --> userId
 
 
 

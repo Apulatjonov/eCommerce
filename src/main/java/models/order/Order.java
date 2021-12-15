@@ -17,6 +17,7 @@ public class Order extends BaseModel {
     private int quantity;
     private String photo = "";
     private UUID productId;
+    private UUID categoryId;
     private UUID shopId;
     private UUID userId;
     private Status status;
